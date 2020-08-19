@@ -274,7 +274,7 @@ class Subapertures(poppy.OpticalElement):
                     intensity_array=sub_wf.as_fits()
                 else:
                     intensity_array = sub_wf.intensity
-                self.centroid_list[:,i,j] = cent_function(intensity_array,**kwargs, relativeto = relativeto)
+                self.centroid_list[:,i,j] = cent_function(intensity_array,**kwargs, relativeto = relativeto, boxsize =20) 
         self._centroided_flag = True
         return self.centroid_list
 
@@ -317,8 +317,8 @@ class ShackHartmannWavefrontSensor(Subapertures):
     """
 
     def __init__(self,lenslet_pitch = 300*u.um,
-                             lenslet_fl = 14.2*u.mm,
-                             pixel_pitch = 2.2*u.um,
+                             lenslet_fl = 10*u.mm,
+                             pixel_pitch = 5*u.um,
                              n_lenslets=12,
                              circular=False,
                              detector = None,
@@ -334,8 +334,7 @@ class ShackHartmannWavefrontSensor(Subapertures):
         if circular:
             aperture=poppy.CircularAperture(radius = self.lenslet_pitch/2, planetype = PlaneType.pupil)
         else:
-            ap_keywords={"size":self.lenslet_pitch,"planetype":PlaneType.pupil}
-            aperture=poppy.SquareAperture(size = self.lenslet_pitch, planetype = PlaneType.pupil)
+            aperture=poppy.SquareAperture(size = self.lenslet_pitch)
 
         optic_array = np.array([[aperture, aperture],[aperture, aperture]])
         
